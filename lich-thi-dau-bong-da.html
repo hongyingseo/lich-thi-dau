@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LỊCH THI ĐẤU BÓNG ĐÁ HÔM NAY</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://cdn.pixabay.com/photo/2016/11/29/09/16/football-1868975_1280.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+    .header {
+      background: rgba(0, 123, 255, 0.95);
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    .group {
+      margin-bottom: 20px;
+    }
+    .group h3 {
+      margin: 16px 0 8px;
+      font-size: 16px;
+      color: #222;
+      border-left: 4px solid #007bff;
+      padding-left: 8px;
+      background: #e9f0ff;
+      padding: 6px 8px;
+      border-radius: 6px;
+    }
+    .match {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #ccc;
+      font-size: 15px;
+    }
+    .teams {
+      flex: 2;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .team {
+      width: 45%;
+      font-weight: bold;
+    }
+    .status {
+      font-size: 12px;
+      font-weight: normal;
+      color: #777;
+      margin-top: 4px;
+    }
+    .odds-block {
+      text-align: right;
+      flex: 1;
+      font-size: 14px;
+    }
+    .odds {
+      font-weight: bold;
+      color: #007bff;
+    }
+    .time {
+      min-width: 115px;
+      font-size: 14px;
+      color: #333;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">LỊCH THI ĐẤU BÓNG ĐÁ HÔM NAY</div>
+  <div class="container">
+    <div id="match-container"></div>
+  </div>
+
+  <!-- JS giữ nguyên -->
+  <script>
+    let matches = [...]; // giữ nguyên nội dung JS hiện tại ở phần matches và các function xử lý dữ liệu
+  </script>
+</body>
+</html>
