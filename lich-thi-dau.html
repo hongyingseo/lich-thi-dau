@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -50,7 +49,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái (Cập nhật từ RSS)</h2>
+    <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái (Giả lập thời gian thực)</h2>
     <div class="scrollable">
       <table>
         <thead>
@@ -68,29 +67,30 @@
   </div>
 
   <script>
-    const rssUrl = 'https://example.com/fixtures.xml'; // Anh thay bằng RSS thật ở đây
-
-    async function fetchRSS() {
-      try {
-        const res = await fetch(rssUrl);
-        const text = await res.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, 'application/xml');
-        const items = xml.querySelectorAll('item');
-
-        const matches = Array.from(items).map(item => ({
-          time: item.querySelector('pubDate')?.textContent || 'N/A',
-          teams: item.querySelector('title')?.textContent || 'Không rõ',
-          odds: item.querySelector('description')?.textContent || '-'
-        }));
-
-        renderMatches(matches);
-      } catch (err) {
-        console.error('Không thể tải RSS:', err);
+    const matches = [
+      {
+        time: "12/04/2025 19:15",
+        teams: "Hà Nội FC vs HAGL",
+        odds: "0 : 0.5"
+      },
+      {
+        time: "12/04/2025 22:00",
+        teams: "Arsenal vs Chelsea",
+        odds: "0 : 0"
+      },
+      {
+        time: "13/04/2025 01:30",
+        teams: "Real Madrid vs Sevilla",
+        odds: "-0.75 : 0"
+      },
+      {
+        time: "13/04/2025 17:00",
+        teams: "Viettel vs Nam Định",
+        odds: "-0.25 : 0"
       }
-    }
+    ];
 
-    function renderMatches(matches) {
+    function renderMatches() {
       const tbody = document.getElementById("match-list");
       tbody.innerHTML = "";
       matches.forEach(match => {
@@ -103,8 +103,8 @@
       });
     }
 
-    fetchRSS();
-    setInterval(fetchRSS, 60000);
+    renderMatches();
+    setInterval(renderMatches, 60000);
   </script>
 </body>
 </html>
