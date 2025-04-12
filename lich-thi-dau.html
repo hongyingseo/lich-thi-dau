@@ -12,7 +12,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
       background: #fff;
       padding: 20px;
@@ -36,6 +36,7 @@
       background-color: #f0f0f0;
       position: sticky;
       top: 0;
+      z-index: 1;
     }
     .scrollable {
       max-height: 400px;
@@ -45,18 +46,46 @@
       color: #007bff;
       font-weight: bold;
     }
+    .live {
+      background-color: #ffeaea;
+      color: #d60000;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .filter {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filter select {
+      padding: 8px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái (Giả lập thời gian thực)</h2>
+    <div class="filter">
+      <select id="filter-league">
+        <option value="all">Tất cả giải đấu</option>
+        <option value="V.League">V.League</option>
+        <option value="Premier League">Premier League</option>
+        <option value="La Liga">La Liga</option>
+      </select>
+    </div>
     <div class="scrollable">
       <table>
         <thead>
           <tr>
             <th>🕒 Thời gian</th>
             <th>⚽ Trận đấu</th>
+            <th>🏆 Giải đấu</th>
             <th>📊 Kèo (FT)</th>
+            <th>🔴</th>
           </tr>
         </thead>
         <tbody id="match-list">
@@ -69,39 +98,62 @@
   <script>
     const matches = [
       {
-        time: "12/04/2025 19:15",
+        time: "2025-04-12T19:15:00",
         teams: "Hà Nội FC vs HAGL",
-        odds: "0 : 0.5"
+        odds: "0 : 0.5",
+        league: "V.League"
       },
       {
-        time: "12/04/2025 22:00",
+        time: "2025-04-12T22:00:00",
         teams: "Arsenal vs Chelsea",
-        odds: "0 : 0"
+        odds: "0 : 0",
+        league: "Premier League"
       },
       {
-        time: "13/04/2025 01:30",
+        time: "2025-04-13T01:30:00",
         teams: "Real Madrid vs Sevilla",
-        odds: "-0.75 : 0"
+        odds: "-0.75 : 0",
+        league: "La Liga"
       },
       {
-        time: "13/04/2025 17:00",
+        time: "2025-04-13T17:00:00",
         teams: "Viettel vs Nam Định",
-        odds: "-0.25 : 0"
+        odds: "-0.25 : 0",
+        league: "V.League"
       }
     ];
 
+    function isLive(matchTime) {
+      const now = new Date();
+      const start = new Date(matchTime);
+      const end = new Date(start.getTime() + 90 * 60 * 1000);
+      return now >= start && now <= end;
+    }
+
     function renderMatches() {
       const tbody = document.getElementById("match-list");
+      const selectedLeague = document.getElementById("filter-league").value;
       tbody.innerHTML = "";
+
       matches.forEach(match => {
+        if (selectedLeague !== "all" && match.league !== selectedLeague) return;
+
+        const matchTime = new Date(match.time);
+        const formattedTime = matchTime.toLocaleString("vi-VN", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+
         const row = `<tr>
-          <td>${match.time}</td>
+          <td>${formattedTime}</td>
           <td>${match.teams}</td>
+          <td>${match.league}</td>
           <td class="odds">${match.odds}</td>
+          <td>${isLive(match.time) ? '<span class="live">Live</span>' : ''}</td>
         </tr>`;
+
         tbody.innerHTML += row;
       });
     }
+
+    document.getElementById("filter-league").addEventListener("change", renderMatches);
 
     renderMatches();
     setInterval(renderMatches, 60000);
