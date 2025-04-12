@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Thi Đấu Bóng Đá & Kèo Real-time</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+      position: sticky;
+      top: 0;
+    }
+    .scrollable {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .odds {
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái (Cập nhật từ RSS)</h2>
+    <div class="scrollable">
+      <table>
+        <thead>
+          <tr>
+            <th>🕒 Thời gian</th>
+            <th>⚽ Trận đấu</th>
+            <th>📊 Kèo (FT)</th>
+          </tr>
+        </thead>
+        <tbody id="match-list">
+          <!-- Dữ liệu sẽ được chèn bằng JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const rssUrl = 'https://example.com/fixtures.xml'; // Anh thay bằng RSS thật ở đây
+
+    async function fetchRSS() {
+      try {
+        const res = await fetch(rssUrl);
+        const text = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, 'application/xml');
+        const items = xml.querySelectorAll('item');
+
+        const matches = Array.from(items).map(item => ({
+          time: item.querySelector('pubDate')?.textContent || 'N/A',
+          teams: item.querySelector('title')?.textContent || 'Không rõ',
+          odds: item.querySelector('description')?.textContent || '-'
+        }));
+
+        renderMatches(matches);
+      } catch (err) {
+        console.error('Không thể tải RSS:', err);
+      }
+    }
+
+    function renderMatches(matches) {
+      const tbody = document.getElementById("match-list");
+      tbody.innerHTML = "";
+      matches.forEach(match => {
+        const row = `<tr>
+          <td>${match.time}</td>
+          <td>${match.teams}</td>
+          <td class="odds">${match.odds}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    fetchRSS();
+    setInterval(fetchRSS, 60000);
+  </script>
+</body>
+</html>
