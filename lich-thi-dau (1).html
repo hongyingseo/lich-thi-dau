@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Thi Đấu Bóng Đá & Kèo Real-time</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+      position: sticky;
+      top: 0;
+    }
+    .scrollable {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .odds {
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái (Giả lập thời gian thực)</h2>
+    <div class="scrollable">
+      <table>
+        <thead>
+          <tr>
+            <th>🕒 Thời gian</th>
+            <th>⚽ Trận đấu</th>
+            <th>📊 Kèo (FT)</th>
+          </tr>
+        </thead>
+        <tbody id="match-list">
+          <!-- Dữ liệu sẽ được chèn bằng JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const matches = [
+      {
+        time: "12/04/2025 19:15",
+        teams: "Hà Nội FC vs HAGL",
+        odds: "0 : 0.5"
+      },
+      {
+        time: "12/04/2025 22:00",
+        teams: "Arsenal vs Chelsea",
+        odds: "0 : 0"
+      },
+      {
+        time: "13/04/2025 01:30",
+        teams: "Real Madrid vs Sevilla",
+        odds: "-0.75 : 0"
+      },
+      {
+        time: "13/04/2025 17:00",
+        teams: "Viettel vs Nam Định",
+        odds: "-0.25 : 0"
+      }
+    ];
+
+    function renderMatches() {
+      const tbody = document.getElementById("match-list");
+      tbody.innerHTML = "";
+      matches.forEach(match => {
+        const row = `<tr>
+          <td>${match.time}</td>
+          <td>${match.teams}</td>
+          <td class="odds">${match.odds}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    renderMatches();
+    setInterval(renderMatches, 60000);
+  </script>
+</body>
+</html>
