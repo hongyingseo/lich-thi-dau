@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      max-height: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    .group {
+      margin-bottom: 20px;
+    }
+    .group h3 {
+      margin: 16px 0 8px;
+      font-size: 16px;
+      color: #222;
+      border-left: 4px solid #007bff;
+      padding-left: 8px;
+    }
+    .match {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    .teams {
+      flex: 2;
+    }
+    .odds-block {
+      text-align: right;
+      flex: 1;
+    }
+    .odds {
+      font-weight: bold;
+      color: #007bff;
+    }
+    .live {
+      color: red;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .time {
+      min-width: 70px;
+      font-size: 13px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lịch Thi Đấu Bóng Đá & Kèo Nhà Cái</h2>
+    <div id="match-container"></div>
+  </div>
+
+  <script>
+    let matches = [
+      { time: "2025-04-12T19:15:00", teams: "Hà Nội FC vs HAGL", odds: "0 : 0.5", league: "V.League 1", handicap: "0.88 -0.98" },
+      { time: "2025-04-12T17:00:00", teams: "Viettel vs Nam Định", odds: "-0.25 : 0", league: "V.League 1", handicap: "0.93 -0.93" },
+      { time: "2025-04-12T15:00:00", teams: "PVF CAND vs Phố Hiến", odds: "0 : 0", league: "V.League 2", handicap: "0.91 -0.95" },
+      { time: "2025-04-12T14:00:00", teams: "Công An Hà Nội vs Quảng Nam", odds: "-0.5 : 0", league: "Cúp Quốc Gia", handicap: "0.90 -0.90" },
+      { time: "2025-04-12T22:00:00", teams: "Arsenal vs Chelsea", odds: "0 : 0", league: "Premier League", handicap: "0.91 -0.91" },
+      { time: "2025-04-13T01:30:00", teams: "Real Madrid vs Sevilla", odds: "-0.75 : 0", league: "La Liga", handicap: "0.89 -0.97" },
+      { time: "2025-04-13T03:00:00", teams: "Bayern Munich vs Dortmund", odds: "-0.5 : 0", league: "Bundesliga", handicap: "0.95 -0.95" },
+      { time: "2025-04-13T02:00:00", teams: "AC Milan vs Inter Milan", odds: "0 : 0", league: "Serie A", handicap: "0.90 -0.90" },
+      { time: "2025-04-13T02:45:00", teams: "PSG vs Lyon", odds: "-1 : 0", league: "Ligue 1", handicap: "0.85 -0.85" },
+      { time: "2025-04-14T00:00:00", teams: "Fenerbahce vs Galatasaray", odds: "-0.25 : 0", league: "Super Lig", handicap: "0.89 -0.89" },
+      { time: "2025-04-14T02:00:00", teams: "Ajax vs PSV", odds: "0 : 0", league: "Eredivisie", handicap: "0.90 -0.90" },
+      { time: "2025-04-14T04:00:00", teams: "America MG vs Flamengo", odds: "-0.5 : 0", league: "Brasileirao", handicap: "0.92 -0.92" }
+    ];
+
+    function isLive(matchTime) {
+      const now = new Date();
+      const start = new Date(matchTime);
+      const end = new Date(start.getTime() + 90 * 60 * 1000);
+      return now >= start && now <= end;
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString("vi-VN", { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function formatHour(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderGroupedMatches() {
+      const container = document.getElementById("match-container");
+      container.innerHTML = "";
+
+      const grouped = {};
+      matches.forEach(match => {
+        const date = formatDate(match.time);
+        if (!grouped[date]) grouped[date] = {};
+        if (!grouped[date][match.league]) grouped[date][match.league] = [];
+        grouped[date][match.league].push(match);
+      });
+
+      Object.keys(grouped).forEach(date => {
+        const dateBlock = document.createElement("div");
+        dateBlock.className = "group";
+        dateBlock.innerHTML = `<h3>📅 ${date}</h3>`;
+
+        Object.keys(grouped[date]).forEach(league => {
+          const leagueBlock = document.createElement("div");
+          leagueBlock.className = "group";
+          leagueBlock.innerHTML += `<h3>🏆 ${league}</h3>`;
+
+          grouped[date][league].forEach(match => {
+            const time = formatHour(match.time);
+            const status = isLive(match.time) ? '<div class="live">Live</div>' : "";
+            leagueBlock.innerHTML += `
+              <div class="match">
+                <div class="time">${time}</div>
+                <div class="teams">
+                  <div>${match.teams}</div>
+                  <div class="odds">Kèo: ${match.odds} | Cược: ${match.handicap}</div>
+                </div>
+                <div class="odds-block">
+                  ${status}
+                </div>
+              </div>`;
+          });
+
+          dateBlock.appendChild(leagueBlock);
+        });
+
+        container.appendChild(dateBlock);
+      });
+    }
+
+    async function updateData() {
+      matches = matches.map(match => ({
+        ...match,
+        odds: match.odds,
+        handicap: (Math.random() * 0.5 + 0.7).toFixed(2) + " -" + (Math.random() * 0.5 + 0.7).toFixed(2)
+      }));
+    }
+
+    async function refresh() {
+      await updateData();
+      renderGroupedMatches();
+    }
+
+    refresh();
+    setInterval(refresh, 60000);
+  </script>
+</body>
+</html>
